@@ -6,6 +6,8 @@ interface SettingsModalProps {
   plantName: string;
   setPlantName: (name: string) => void;
   onReset: () => void;
+  gameMode: "easy" | "normal" | "hard";
+  setGameMode: (mode: "easy" | "normal" | "hard") => void;
 }
 
 const SettingsModal: React.FC<SettingsModalProps> = ({
@@ -14,6 +16,8 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
   plantName,
   setPlantName,
   onReset,
+  gameMode,
+  setGameMode,
 }) => {
   if (!isOpen) return null;
 
@@ -29,6 +33,21 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
             value={plantName}
             onChange={(e) => setPlantName(e.target.value)}
           />
+        </label>
+
+        <label className="block">
+          <span className="text-sm text-gray-700">Game Mode</span>
+          <select
+            className="w-full mt-1 p-2 border rounded-lg"
+            value={gameMode}
+            onChange={(e) =>
+              setGameMode(e.target.value as "easy" | "normal" | "hard")
+            }
+          >
+            <option value="easy">Relax (60s)</option>
+            <option value="normal">Normal (30s)</option>
+            <option value="hard">Difficult (10s)</option>
+          </select>
         </label>
 
         <button

@@ -1,5 +1,5 @@
 export type Mood = "happy" | "thirsty" | "sunny" | "hungry";
-export type GrowthStage = "sprout" | "seedling" | "bloom";
+export type GrowthStage = "seedling" | "sprout" | "bloom";
 
 export interface PlantState {
   hydration: number;

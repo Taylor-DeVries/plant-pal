@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Plant from "./components/Plant";
 import StatBar from "./components/StatBar";
 import SettingsModal from "./components/SettingsModal";
-import { PlantState } from "./types/plant";
+import { Mood, PlantState } from "./types/plant";
 import { motion } from "framer-motion";
+
+type GameMode = "easy" | "normal" | "hard";
 
 function App() {
   const [plant, setPlant] = useState<PlantState>({
@@ -11,21 +13,67 @@ function App() {
     sunlight: 50,
     nutrients: 50,
     mood: "happy",
-    growthStage: "sprout",
+    growthStage: "seedling",
     name: "Leafy",
   });
 
+  const moodEmojiMap: Record<Mood, string> = {
+    happy: "🌼",
+    thirsty: "💧",
+    sunny: "☀️",
+    hungry: "🌿",
+  };
+
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [gameMode, setGameMode] = useState<GameMode>("normal");
+
+  const getIntervalTime = () => {
+    switch (gameMode) {
+      case "easy":
+        return 60000;
+      case "normal":
+        return 30000;
+      case "hard":
+        return 10000;
+      default:
+        return 30000;
+    }
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPlant((prevPlant) => {
+        const newHydration = Math.max(0, prevPlant.hydration - 10);
+        const newSunlight = Math.max(0, prevPlant.sunlight - 10);
+        const newNutrients = Math.max(0, prevPlant.nutrients - 10);
+
+        const newPlant = {
+          ...prevPlant,
+          hydration: newHydration,
+          sunlight: newSunlight,
+          nutrients: newNutrients,
+        };
+
+        newPlant.mood = getMood(newPlant);
+        newPlant.growthStage = getGrowthStage(newPlant);
+        return newPlant;
+      });
+    }, getIntervalTime());
+
+    return () => clearInterval(interval);
+  }, [gameMode]);
 
   const updateStat = (
     key: keyof Omit<PlantState, "mood" | "growthStage" | "name">,
     amount: number
   ) => {
-    const newValue = Math.min(100, plant[key] + amount);
-    const newPlant = { ...plant, [key]: newValue };
-    newPlant.mood = getMood(newPlant);
-    newPlant.growthStage = getGrowthStage(newPlant);
-    setPlant(newPlant);
+    setPlant((prevPlant) => {
+      const newValue = Math.min(100, prevPlant[key] + amount);
+      const newPlant = { ...prevPlant, [key]: newValue };
+      newPlant.mood = getMood(newPlant);
+      newPlant.growthStage = getGrowthStage(newPlant);
+      return newPlant;
+    });
   };
 
   const getMood = (plant: PlantState): PlantState["mood"] => {
@@ -38,8 +86,8 @@ function App() {
   const getGrowthStage = (plant: PlantState): PlantState["growthStage"] => {
     const average = (plant.hydration + plant.sunlight + plant.nutrients) / 3;
     if (average >= 80) return "bloom";
-    if (average >= 50) return "seedling";
-    return "sprout";
+    if (average >= 50) return "sprout";
+    return "seedling";
   };
 
   const resetPlant = () => {
@@ -48,7 +96,7 @@ function App() {
       sunlight: 50,
       nutrients: 50,
       mood: "happy",
-      growthStage: "sprout",
+      growthStage: "seedling",
       name: "Leafy",
     });
   };
@@ -66,12 +114,12 @@ function App() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.2 }}
       >
-        🌿 Plant Pal
+        🌿 my plant pal 🌿
       </motion.h1>
 
       <Plant mood={plant.mood} growthStage={plant.growthStage} />
 
-      <div className="text-green-800 font-semibold">Hello, {plant.name}!</div>
+      <div className="text-green-800 font-semibold">hello, {plant.name}!</div>
 
       <div className="space-y-3 w-full max-w-sm">
         <StatBar label="Hydration" value={plant.hydration} color="#6EE7B7" />
@@ -102,9 +150,13 @@ function App() {
         ))}
       </div>
 
+      <div className="text-2xl font-bold text-green-800">
+        mood: {moodEmojiMap[plant.mood]}
+      </div>
+
       <button
         onClick={() => setIsSettingsOpen(true)}
-        className="mt-6 text-sm text-green-800 underline"
+        className="mt-6 text-sm text-green-800 font-semibold bg-white/60 backdrop-blur-md px-4 py-2 rounded-xl shadow-md border border-white hover:bg-white transition"
       >
         ⚙️ Settings
       </button>
@@ -115,6 +167,8 @@ function App() {
         plantName={plant.name}
         setPlantName={(name) => setPlant((p) => ({ ...p, name }))}
         onReset={resetPlant}
+        gameMode={gameMode}
+        setGameMode={setGameMode}
       />
     </motion.div>
   );
