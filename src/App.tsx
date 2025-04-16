@@ -8,13 +8,18 @@ import { motion } from "framer-motion";
 type GameMode = "easy" | "normal" | "hard";
 
 function App() {
-  const [plant, setPlant] = useState<PlantState>({
+  const defaultPlantState: PlantState = {
     hydration: 50,
     sunlight: 50,
     nutrients: 50,
     mood: "am happy",
     growthStage: "seedling",
     name: "Leafy",
+  };
+
+  const [plant, setPlant] = useState<PlantState>(() => {
+    const savedPlant = localStorage.getItem("plantState");
+    return savedPlant ? JSON.parse(savedPlant) : defaultPlantState;
   });
 
   const moodEmojiMap: Record<Mood, string> = {
@@ -63,6 +68,10 @@ function App() {
     return () => clearInterval(interval);
   }, [gameMode]);
 
+  useEffect(() => {
+    localStorage.setItem("plantState", JSON.stringify(plant));
+  }, [plant]);
+
   const updateStat = (
     key: keyof Omit<PlantState, "mood" | "growthStage" | "name">,
     amount: number
@@ -91,14 +100,7 @@ function App() {
   };
 
   const resetPlant = () => {
-    setPlant({
-      hydration: 50,
-      sunlight: 50,
-      nutrients: 50,
-      mood: "am happy",
-      growthStage: "seedling",
-      name: "Leafy",
-    });
+    setPlant(defaultPlantState);
   };
 
   return (
