@@ -12,16 +12,16 @@ function App() {
     hydration: 50,
     sunlight: 50,
     nutrients: 50,
-    mood: "happy",
+    mood: "am happy",
     growthStage: "seedling",
     name: "Leafy",
   });
 
   const moodEmojiMap: Record<Mood, string> = {
-    happy: "🌼",
-    thirsty: "💧",
-    sunny: "☀️",
-    hungry: "🌿",
+    "am happy": "🌼",
+    "am thirsty": "💧",
+    "need sun": "☀️",
+    "am hungry": "🌿",
   };
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -77,10 +77,10 @@ function App() {
   };
 
   const getMood = (plant: PlantState): PlantState["mood"] => {
-    if (plant.hydration <= 40) return "thirsty";
-    if (plant.sunlight <= 50) return "sunny";
-    if (plant.nutrients <= 30) return "hungry";
-    return "happy";
+    if (plant.hydration <= 40) return "am thirsty";
+    if (plant.sunlight <= 50) return "need sun";
+    if (plant.nutrients <= 30) return "am hungry";
+    return "am happy";
   };
 
   const getGrowthStage = (plant: PlantState): PlantState["growthStage"] => {
@@ -95,7 +95,7 @@ function App() {
       hydration: 50,
       sunlight: 50,
       nutrients: 50,
-      mood: "happy",
+      mood: "am happy",
       growthStage: "seedling",
       name: "Leafy",
     });
@@ -119,8 +119,10 @@ function App() {
 
       <Plant mood={plant.mood} growthStage={plant.growthStage} />
 
-      <div className="text-green-800 font-semibold">hello, {plant.name}!</div>
-
+      <div className="flex flex-col items-center gap-1">
+        <p className="text-green-800 font-semibold">hi i'm, {plant.name}!</p>
+        <p className="text-green-800 font-semibold">i {plant.mood}!</p>
+      </div>
       <div className="space-y-3 w-full max-w-sm">
         <StatBar label="Hydration" value={plant.hydration} color="#6EE7B7" />
         <StatBar label="Sunlight" value={plant.sunlight} color="#FCD34D" />
