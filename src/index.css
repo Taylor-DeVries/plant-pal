@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 body {
-  @apply bg-gradient-to-b from-green-50 to-lime-100 text-gray-800;
   font-family: "Inter", sans-serif;
 }
 
