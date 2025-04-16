@@ -77,9 +77,9 @@ function App() {
   };
 
   const getMood = (plant: PlantState): PlantState["mood"] => {
-    if (plant.hydration < 30) return "thirsty";
-    if (plant.sunlight < 30) return "sunny";
-    if (plant.nutrients < 30) return "hungry";
+    if (plant.hydration <= 40) return "thirsty";
+    if (plant.sunlight <= 50) return "sunny";
+    if (plant.nutrients <= 30) return "hungry";
     return "happy";
   };
 
@@ -138,7 +138,7 @@ function App() {
             onClick={() =>
               updateStat(
                 key as keyof Omit<PlantState, "mood" | "growthStage" | "name">,
-                20
+                10
               )
             }
             whileHover={{ scale: 1.05 }}

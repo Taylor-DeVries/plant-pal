@@ -58,10 +58,10 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
         </button>
 
         <button
-          className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg w-full hover:bg-gray-200"
+          className="bg-green-100 text-gray-700 px-4 py-2 rounded-lg w-full hover:bg-green-200"
           onClick={onClose}
         >
-          Close
+          Save
         </button>
       </div>
     </div>
