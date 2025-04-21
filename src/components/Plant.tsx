@@ -1,22 +1,40 @@
 import React, { useEffect, useState } from "react";
-import { Mood, GrowthStage } from "../types/plant";
+import { Mood, GrowthStage, plantType } from "../types/plant";
 import { motion, AnimatePresence } from "framer-motion";
 
-interface Props {
+interface PlantProps {
   mood: Mood;
   growthStage: GrowthStage;
+  type: plantType;
 }
 
-const plantImageMap: Record<GrowthStage, string> = {
-  sprout: "/assets/sprout.png",
-  seedling: "/assets/seedling.png",
-  bloom: "/assets/bloom.png",
+const plantImages: Record<string, Record<string, string>> = {
+  Cactus: {
+    seedling: "/assets/seedling.png",
+    sprout: "/assets/sprout.png",
+    bloom: "/assets/cactus-bloom.png",
+  },
+  Tree: {
+    seedling: "/assets/seedling.png",
+    sprout: "/assets/sprout-tree.png",
+    bloom: "/assets/tree-bloom.png",
+  },
+  Fruit: {
+    seedling: "/assets/seedling.png",
+    sprout: "/assets/sprout-fruit.png",
+    bloom: "/assets/fruit-bloom.png",
+  },
+  Flower: {
+    seedling: "/assets/seedling.png",
+    sprout: "/assets/sprout.png",
+    bloom: "/assets/bloom.png",
+  },
 };
 
 const particles = Array.from({ length: 12 }, (_, i) => i);
 
-const Plant: React.FC<Props> = ({ growthStage }) => {
-  const [prevStage, setPrevStage] = useState<GrowthStage>(growthStage);
+const Plant: React.FC<PlantProps> = ({ growthStage, type }) => {
+  const [prevStage, setPrevStage] = useState<string>(growthStage);
   const [showParticles, setShowParticles] = useState(false);
   const [clicked, setClicked] = useState(false);
 
@@ -33,6 +51,8 @@ const Plant: React.FC<Props> = ({ growthStage }) => {
     setTimeout(() => setClicked(false), 600);
   };
 
+  const imageSrc = plantImages[type]?.[growthStage] || "/assets/sprout.png";
+
   return (
     <div className="relative flex flex-col items-center space-y-2">
       <motion.div
@@ -42,8 +62,8 @@ const Plant: React.FC<Props> = ({ growthStage }) => {
         transition={{ duration: 0.6, ease: "easeInOut" }}
       >
         <img
-          src={plantImageMap[growthStage]}
-          alt={growthStage}
+          src={imageSrc}
+          alt={`${type} at ${growthStage}`}
           className="w-32 h-32 object-contain"
         />
 
