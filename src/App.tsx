@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Plant from "./components/Plant";
 import StatBar from "./components/StatBar";
 import SettingsModal from "./components/SettingsModal";
-import { Mood, PlantState } from "./types/plant";
+import { Mood, PlantState, plantType } from "./types/plant";
 import { motion } from "framer-motion";
 
 type GameMode = "easy" | "normal" | "hard";
@@ -15,6 +15,7 @@ function App() {
     mood: "am happy",
     growthStage: "seedling",
     name: "Leafy",
+    type: "Flower",
   };
 
   const [plant, setPlant] = useState<PlantState>(() => {
@@ -73,7 +74,7 @@ function App() {
   }, [plant]);
 
   const updateStat = (
-    key: keyof Omit<PlantState, "mood" | "growthStage" | "name">,
+    key: keyof Omit<PlantState, "mood" | "growthStage" | "name" | "type">,
     amount: number
   ) => {
     setPlant((prevPlant) => {
@@ -119,7 +120,11 @@ function App() {
         🌿 my plant pal 🌿
       </motion.h1>
 
-      <Plant mood={plant.mood} growthStage={plant.growthStage} />
+      <Plant
+        mood={plant.mood}
+        growthStage={plant.growthStage}
+        type={plant.type}
+      />
 
       <div className="flex flex-col items-center gap-1">
         <p className="text-green-800 font-semibold">hi i'm, {plant.name}!</p>
@@ -141,7 +146,10 @@ function App() {
             key={key}
             onClick={() =>
               updateStat(
-                key as keyof Omit<PlantState, "mood" | "growthStage" | "name">,
+                key as keyof Omit<
+                  PlantState,
+                  "mood" | "growthStage" | "name" | "type"
+                >,
                 10
               )
             }
@@ -170,6 +178,8 @@ function App() {
         onClose={() => setIsSettingsOpen(false)}
         plantName={plant.name}
         setPlantName={(name) => setPlant((p) => ({ ...p, name }))}
+        plantType={plant.type}
+        setPlantType={(type: plantType) => setPlant((p) => ({ ...p, type }))}
         onReset={resetPlant}
         gameMode={gameMode}
         setGameMode={setGameMode}

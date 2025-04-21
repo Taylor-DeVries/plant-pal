@@ -1,20 +1,27 @@
 import React from "react";
+import { plantType } from "../types/plant";
 
 interface SettingsModalProps {
   isOpen: boolean;
   onClose: () => void;
   plantName: string;
   setPlantName: (name: string) => void;
+  plantType: plantType;
+  setPlantType: (type: plantType) => void;
   onReset: () => void;
   gameMode: "easy" | "normal" | "hard";
   setGameMode: (mode: "easy" | "normal" | "hard") => void;
 }
+
+const plantTypes: plantType[] = ["Cactus", "Fruit", "Tree", "Flower"];
 
 const SettingsModal: React.FC<SettingsModalProps> = ({
   isOpen,
   onClose,
   plantName,
   setPlantName,
+  plantType,
+  setPlantType,
   onReset,
   gameMode,
   setGameMode,
@@ -33,6 +40,21 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
             value={plantName}
             onChange={(e) => setPlantName(e.target.value)}
           />
+        </label>
+
+        <label className="block">
+          <span className="text-sm text-gray-700">Plant Type</span>
+          <select
+            className="w-full mt-1 p-2 border rounded-lg"
+            value={plantType}
+            onChange={(e) => setPlantType(e.target.value as plantType)}
+          >
+            {plantTypes.map((type) => (
+              <option key={type} value={type}>
+                {type}
+              </option>
+            ))}
+          </select>
         </label>
 
         <label className="block">
