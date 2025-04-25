@@ -4,7 +4,7 @@
 
 ## 🛜 Check it out
 
-- Link to site: (plant-pal){https://plantpal-relax.vercel.app}
+- Link to site: [plant-pal](https://plantpal-relax.vercel.app)
 
 ## 🪴 Features
 
