@@ -2,6 +2,10 @@
 
 **Plant Pal** is a cozy virtual desk plant web app built with **React**, **TypeScript**, and **Tailwind CSS**. Take care of your plant while you study or work—watch it grow and react to your care in real-time!
 
+## 🛜 Check it out
+
+- Link to site: (plant-pal){https://plantpal-relax.vercel.app}
+
 ## 🪴 Features
 
 - 🌱 Dynamic growth stages: seedling → sprout → bloom
